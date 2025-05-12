@@ -1,5 +1,7 @@
 from django.urls import path
-from views import send_text_email
+from . import views
+
 urlpatterns = [
-    path('sendTextEmail/', views.sendTextEmail, name='sendTextEmail'),
+    path('', views.index, name='index'),
+    path('sendTextEmail/', views.send_text_email, name='sendTextEmail'),
 ]
