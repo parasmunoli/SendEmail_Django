@@ -1,4 +1,3 @@
-<!-- signup.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +36,12 @@
             margin-bottom: 5px;
         }
 
-        input[type="email"] {
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        input[type="number"],
+        select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -60,6 +64,17 @@
             background-color: #45a049;
         }
 
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            align-items: start;
+        }
+        .radio-group input[type="radio"] {
+            margin-right: 5px;
+            margin-left: 0px;
+        }
+
+
     </style>
 </head>
 <body>
@@ -68,16 +83,47 @@
         <h2>Signup Form</h2>
         <form action="/sendTextEmail/" method="POST">
             {% csrf_token %}
-            <!-- Email Field -->
             <div class="form-group">
-                <label for="email">Email</label>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Gender</label>
+                <div class="radio-group">
+                    <input type="radio" id="male" name="gender" value="male" required>
+                    <label for="male">Male</label>
+
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female">Female</label>
+
+                    <input type="radio" id="other" name="gender" value="other">
+                    <label for="other">Other</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" required>
             </div>
 
-            <!-- Submit Button -->
-            <input type="submit" value="Send Email">
+            <div class="form-group">
+                <label for="password">Create Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+
+            <input type="submit" value="Send OTP">
         </form>
     </div>
-
 </body>
 </html>
