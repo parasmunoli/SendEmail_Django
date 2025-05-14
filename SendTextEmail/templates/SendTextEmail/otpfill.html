@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Enter OTP</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .otp-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .otp-container h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .otp-inputs {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .otp-inputs input {
+      width: 40px;
+      height: 50px;
+      font-size: 24px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    .otp-inputs input:focus {
+      border-color: #4CAF50;
+    }
+
+    .submit-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .submit-btn:hover {
+      background-color: #45a049;
+    }
+
+    .error-message {
+      color: #f44336;
+      margin-bottom: 15px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="otp-container">
+    <h2>Enter OTP</h2>
+    {% if error_message %}
+    <div class="error-message" style="display: block;">{{ error_message }}</div>
+    {% endif %}
+    <form action="/validateOTP/" method="POST">
+      {% csrf_token %}
+      <div class="otp-inputs">
+        <input type="text" class="otp-digit" maxlength="1" required oninput="updateOTP()" />
+        <input type="text" class="otp-digit" maxlength="1" required oninput="updateOTP()" />
+        <input type="text" class="otp-digit" maxlength="1" required oninput="updateOTP()" />
+        <input type="text" class="otp-digit" maxlength="1" required oninput="updateOTP()" />
+        <input type="text" class="otp-digit" maxlength="1" required oninput="updateOTP()" />
+        <input type="text" class="otp-digit" maxlength="1" required oninput="updateOTP()" />
+        <input type="hidden" id="user_otp" name="user_otp" required />
+      </div>
+      <input type="submit" class="submit-btn" value="Verify OTP" />
+    </form>
+  </div>
+
+  <script>
+    // Function to update the hidden input with combined OTP values
+    function updateOTP() {
+      const digits = document.querySelectorAll('.otp-digit');
+      const otpValue = Array.from(digits).map(input => input.value).join('');
+      document.getElementById('user_otp').value = otpValue;
+    }
+
+    // Auto-focus next input
+    const inputs = document.querySelectorAll('.otp-digit');
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        updateOTP();
+        if (input.value.length === 1 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && input.value === '' && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+    });
+
+    // Ensure OTP is updated on form submission
+    document.querySelector('form').addEventListener('submit', function() {
+      updateOTP();
+    });
+  </script>
+
+</body>
+</html>
